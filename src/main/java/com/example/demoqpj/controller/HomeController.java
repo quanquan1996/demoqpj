@@ -2,11 +2,43 @@ package com.example.demoqpj.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.ui.Model;
+import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.regions.Region;
+import software.amazon.awssdk.regions.Region;
+import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.Bucket;
+import software.amazon.awssdk.services.s3.model.ListBucketsResponse;
+import software.amazon.awssdk.services.s3.model.S3Exception;
+
+import java.util.List;
 
 @Controller
 public class HomeController {
     @RequestMapping("/home")
-    public String hello(){
+    public String hello(Model model) {
+        model.addAttribute("error", "test error");
+        Region region = Region.EU_NORTH_1;
+        S3Client s3 = S3Client.builder()
+                .region(region)
+                .build();
+        String bucketsInfo = listBuckets(s3);
+        model.addAttribute("bucketsInfo", bucketsInfo);
         return "hello";
+    }
+
+    public static String listBuckets(S3Client s3) {
+        try {
+            ListBucketsResponse response = s3.listBuckets();
+            List<Bucket> bucketList = response.buckets();
+            StringBuilder sb = new StringBuilder();
+            bucketList.forEach(bucket -> {
+                sb.append("Bucket Name: " + bucket.name());
+            });
+            return sb.toString();
+        } catch (S3Exception e) {
+            System.err.println(e.awsErrorDetails().errorMessage());
+            return "get bucket error";
+        }
     }
 }
