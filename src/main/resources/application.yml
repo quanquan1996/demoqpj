@@ -1,2 +1,17 @@
 server:
   port: 80
+spring:
+  #数据库配置连接
+  datasource:
+    url: jdbc:mysql://database-qpj.cluster-cvk4uwiikfne.eu-north-1.rds.amazonaws.com:3306/demo?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai&useSSL=false
+    username: qpj
+    password: ''
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
+    hibernate:
+      # DDL 级别 (create, create-drop, validate, update)
+      ddl-auto: update
+    show-sql: true

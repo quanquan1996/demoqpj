@@ -1,10 +1,29 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>hello</title>
 </head>
 <body>
-<label  th:text="${bucketsInfo}"></label>
+<label th:text="${bucketsInfo}"></label>
+<table>
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>书名</th>
+        <th>作者</th>
+        <th>详情</th>
+    </tr>
+    </thead>
+    <tbody>
+    <!-- 遍历书籍列表 -->
+    <tr th:each="book : ${bookList}">
+        <td th:text="${book.id}"></td>
+        <td th:text="${book.name}"></td>
+        <td th:text="${book.author}"></td>
+        <td th:text="${book.detail}"></td>
+    </tr>
+    </tbody>
+</table>
 </body>
 </html>
