@@ -1,9 +1,11 @@
 package com.example.demoqpj.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.example.demoqpj.entity.BookRepository;
 import org.jasypt.encryption.pbe.StandardPBEStringEncryptor;
 import org.jasypt.util.text.BasicTextEncryptor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.ui.Model;
@@ -21,6 +23,8 @@ import java.util.List;
 public class HomeController {
     @Autowired
     BookRepository bookRepository;
+    @Autowired
+    private RedisTemplate<String, Object> redisTemplate;
     @RequestMapping("/home")
     public String hello(Model model) {
         model.addAttribute("error", "test error");
@@ -31,6 +35,8 @@ public class HomeController {
         String bucketsInfo = listBuckets(s3);
         model.addAttribute("bucketsInfo", bucketsInfo);
         model.addAttribute("bookList", bookRepository.findAll());
+        redisTemplate.opsForValue().set("cacheBook", JSONObject.toJSONString(bookRepository.findAll()));
+        model.addAttribute("bookListCache", redisTemplate.opsForValue().get("cacheBook"));
         return "hello";
     }
 
