@@ -141,7 +141,7 @@
 	</dependencies>
 
 	<build>
-		<finalName>ov_app</finalName>
+		<finalName>demoqpj</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
